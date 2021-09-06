@@ -183,7 +183,7 @@ services:
       args:
         - registry=${REGISTRY}
         - docker_tag=${VERSION}
-    image: ${REGISTRY}/idme:${VERSION}
+    image: ${REGISTRY}/idm:${VERSION}
     container_name: ${IDM_CONTAINER}
     volumes:
       - ./security/idm:/var/run/secrets/idm
