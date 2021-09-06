@@ -1,0 +1,22 @@
+{
+  "metadata": {
+    "realm": "/",
+    "amsterVersion": "7.1.0",
+    "entityType": "IdentityGatewayAgents",
+    "entityId": "ig_agent",
+    "pathParams": {}
+  },
+  "data": {
+    "_id": "ig_agent",
+    "igTokenIntrospection": "Realm",
+    "agentgroup": null,
+    "status": "Active",
+    "igCdssoRedirectUrls": [],
+    "userpassword": "password",
+    "_type": {
+      "_id": "IdentityGatewayAgent",
+      "name": "Identity Gateway Agents",
+      "collection": true
+    }
+  }
+}

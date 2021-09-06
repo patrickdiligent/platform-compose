@@ -1,0 +1,251 @@
+
+version: "3.5"
+
+x-common-variables-properties: &platform-properties
+    - AM_URL=https://${FQDN}/am
+    - AM_ADMIN_URL=https://${FQDN}/am/ui-admin/
+    - IDM_REST_URL=https://${FQDN}/openidm
+    - IDM_ADMIN_URL=https://${FQDN}/admin
+    - IDM_UPLOAD_URL=https://${FQDN}/upload
+    - IDM_EXPORT_URL=https://${FQDN}/export
+    - LOGIN_UI_URL=https://${FQDN}/login/#/service/PlatformLogin
+    - ENDUSER_UI_URL=https://${FQDN}/enduser
+    - PLATFORM_ADMIN_URL=https://${FQDN}/platform
+    - ENDUSER_CLIENT_ID=end-user-ui
+    - ADMIN_CLIENT_ID=idm-admin-ui
+    - THEME=default
+    - PLATFORM_UI_LOCALE=en
+
+services:
+
+  ds-base:
+    build: 
+      context: $DOCKER/ds/ds-base
+      args:
+        - registry=${REGISTRY}
+    image: ${REGISTRY}/ds-base:${VERSION}
+    deploy: 
+      replicas: 0
+      
+  idrepo:
+    build: 
+      context: $DOCKER/ds
+      dockerfile: $DOCKER/ds/idrepo/Dockerfile
+      args: 
+        - docker_tag=${VERSION}
+        - registry=${REGISTRY}
+    image: ${REGISTRY}/ds-idrepo:${VERSION}
+    container_name: idrepo.sdx.local
+    environment:
+      - DS_SET_UID_ADMIN_AND_MONITOR_PASSWORDS=true
+      - DS_UID_ADMIN_PASSWORD=password
+      - DS_UID_MONITOR_PASSWORD=password
+    networks:
+      net:
+    ports:
+      - 389:1389
+    volumes:
+      - idrepodata:/opt/opendj/data
+      - ./security/ds:/opt/opendj/secrets
+    command: start-ds
+
+  cts:
+    build: 
+      context: $DOCKER/ds
+      dockerfile: $DOCKER/ds/cts/Dockerfile
+      args: 
+        - docker_tag=${VERSION}
+        - registry=${REGISTRY}
+    image: ${REGISTRY}/ds-cts:${VERSION}
+    container_name: cts.sdx.local
+    networks:
+      net:
+    ports:
+      - 1389:1389
+    environment:
+      - DS_SET_UID_ADMIN_AND_MONITOR_PASSWORDS=true
+      - DS_UID_ADMIN_PASSWORD=password
+      - DS_UID_MONITOR_PASSWORD=password
+    command: start-ds
+    volumes:
+      - ctsdata:/opt/opendj/data
+      - ./security/ds:/opt/opendj/secrets
+
+  java-11:
+    build: $DOCKER/java-11
+    image: ${REGISTRY}/java-11
+    deploy: 
+      replicas: 0
+  
+  amster:
+    build:       
+      context: $DOCKER/am
+      dockerfile: $DOCKER/am/amster/Dockerfile
+      args:
+        - registry=${REGISTRY}
+    image: ${REGISTRY}/amster:${VERSION}
+    deploy: 
+      replicas: 0
+
+  am-empty:
+    build: 
+      context: $DOCKER/am
+      dockerfile: $DOCKER/am/am-empty/Dockerfile
+    image: ${REGISTRY}/am-empty:${VERSION}
+    deploy: 
+      replicas: 0
+
+  am-base:
+    build: 
+      context: $DOCKER/am
+      dockerfile: $DOCKER/am/am-base/Dockerfile
+      args: 
+        - docker_tag=${VERSION}
+        - registry=${REGISTRY}
+    image: ${REGISTRY}/am-base:${VERSION}
+    deploy: 
+      replicas: 0
+
+  am:
+    build:
+      context: $DOCKER/am/am
+      args:
+        - docker_tag=${VERSION}
+        - registry=${REGISTRY}
+    image: ${REGISTRY}/am:${VERSION}
+    container_name: ${AM_CONTAINER}
+    ports:
+      - 8080:8080
+    networks:
+      net:
+        aliases:
+        - openam.example.com
+    depends_on:
+      - cts
+      - idrepo
+    volumes:
+      - ./security/am:/var/run/secrets
+      - ../../config/stage:/home/forgerock/shared
+    environment:
+      - AM_STORES_USER_SERVERS=idrepo:1389
+      - AM_STORES_USER_CONNECTION_MODE=ldap
+      - AM_STORES_CTS_SERVERS=cts:1389
+      - AM_STORES_SSL_ENABLED=false
+      - AM_PASSWORDS_AMADMIN_CLEAR=password
+      - FQDN=${FQDN}
+      - AM_SERVER_FQDN=${AM_FQDN}
+      - AM_ENCRYPTION_KEY=C00lbeans
+      - PLATFORM_UI_IS_FRAAS=false
+
+  impexp:
+    image: ${REGISTRY}/impexp
+    build:
+      context: $DOCKER/impexp
+      args:
+        - docker_tag=${VERSION}
+        - registry=${REGISTRY}
+    container_name: ${EXPORTER_CONTAINER}
+    environment:
+      - FQDN=${FQDN}
+    volumes:
+      - ./security/amster:/var/run/secrets
+    command: import-export
+    networks:
+      net:
+    # deploy:
+    #   replicas: 0
+
+  amupgrade:
+    image: ${REGISTRY}/amupgrade
+    build:
+      context: ${DOCKER}/am
+      dockerfile: ${DOCKER}/am/amupgrade/Dockerfile
+      args:
+        - registry=${REGISTRY}
+    volumes:
+      - ${DOCKER-DIR}/am/am:/am-config
+      - ../../config/am-upgrader-rules:/rules
+    deploy: 
+      replicas: 0
+    
+  idm-base:
+    build: 
+      context: $DOCKER/idm/idm-base
+      args:
+        - registry=${REGISTRY}
+    image: ${REGISTRY}/idm-base:${VERSION}
+    deploy:
+      replicas: 0
+
+  idm:
+    build: 
+      context: $DOCKER/idm/idm
+      args:
+        - registry=${REGISTRY}
+        - docker_tag=${VERSION}
+    image: ${REGISTRY}/idme:${VERSION}
+    container_name: ${IDM_CONTAINER}
+    volumes:
+      - ./security/idm:/var/run/secrets/idm
+    ports:
+      - 8082:8080
+    environment:
+      - OPENIDM_REPO_HOST=idrepo
+      - OPENIDM_REPO_PORT=1389
+      - OPENIDM_REPO_PASSWORD=password
+      - OPENIDM_SECONDARY_REPO_HOST=idrepo1
+      - OPENIDM_KEYSTORE_LOCATION=/var/run/secrets/idm/keystore.jceks
+      - OPENIDM_TRUSTSTORE_LOCATION=/var/run/secrets/idm/truststore
+    networks:
+      net:
+
+  adminUI:
+    image: gcr.io/forgerock-io/platform-admin-ui:7.1.0
+    container_name: adminui.sdx.local
+    networks:
+      net:
+    environment: *platform-properties
+  
+  enduserUI:
+    image: gcr.io/forgerock-io/platform-enduser-ui:7.1.0
+    container_name: enduserui.sdx.local
+    networks:
+      net:
+    environment: *platform-properties
+
+  loginUI:
+    image: gcr.io/forgerock-io/platform-login-ui:7.1.0
+    container_name: loginui.sdx.local
+    networks:
+      net:
+    environment: *platform-properties
+
+  nginx:
+    image: nginx
+    container_name: nginx.sdx.local
+    networks:
+      net:
+        aliases:
+        - openidm.example.com
+        - am.example.com
+        - demo.example.com
+    ports:
+      - 443:443
+    depends_on:
+      - idm
+      - am
+    volumes:
+      - ./nginx/default.conf.template:/etc/nginx/conf.d/default.conf.template
+      - ./nginx/certs/platform.crt:/etc/nginx/ssl.crt
+      - ./nginx/certs/platform-key.pem:/etc/nginx/ssl-key.pem
+    environment:
+      - SERVER_NAME=$FQDN
+    command: /bin/bash -c "envsubst '$${SERVER_NAME} $${AM_FQDN}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+
+networks:
+  net:
+
+volumes:
+  shared:
+  idrepodata:
+  ctsdata:

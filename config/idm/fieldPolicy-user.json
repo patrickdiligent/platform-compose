@@ -1,0 +1,24 @@
+{
+    "type" : "password-policy",
+    "validator" : [
+        {
+            "_id" : "userPasswordPolicy-character-set-password-validator",
+            "type" : "character-set",
+            "enabled" : true,
+            "allowUnclassifiedCharacters" : true,
+            "characterSet" : [
+                "0:abcdefghijklmnopqrstuvwxyz",
+                "0:ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                "0:0123456789",
+                "0:~!@#$%^&*()-_=+[]{}|;:,.<>/?\"'\\`"
+            ]
+        }
+    ],
+    "defaultPasswordStorageScheme" : [
+        {
+            "_id" : "PBKDF2-HMAC-SHA256"
+        }
+    ],
+    "passwordAttribute" : "password",
+    "resourceCollection" : "managed/user"
+}

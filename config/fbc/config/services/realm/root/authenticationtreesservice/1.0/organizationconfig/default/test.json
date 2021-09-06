@@ -1,0 +1,53 @@
+{
+  "metadata" : {
+    "realm" : "/",
+    "entityType" : "authenticationTreesService",
+    "entityId" : "default/TEST",
+    "uid" : "ou=TEST,ou=default,ou=OrganizationConfig,ou=1.0,ou=authenticationTreesService,ou=services,ou=am-config",
+    "sunServiceID" : "tree",
+    "objectClass" : [
+      "top",
+      "sunServiceComponent"
+    ],
+    "pathParams" : { },
+    "ou" : [
+      "TEST"
+    ]
+  },
+  "data" : {
+    "_id" : "default/TEST",
+    "_type" : {
+      "_id" : "authenticationTreesService",
+      "name" : "authenticationTreesService",
+      "collection" : false
+    },
+    "entryNodeId" : "ae5e3198-27cd-46b7-b705-47ad1c14314e",
+    "staticNodes" : {
+      "startNode" : {
+        "x" : 50,
+        "y" : 25
+      },
+      "70e691a5-1e33-4ac3-a356-e7b6d60d92e0" : {
+        "x" : 521,
+        "y" : 26
+      },
+      "e301438c-0bd0-429c-ab0c-66126501069a" : {
+        "x" : 540,
+        "y" : 133
+      }
+    },
+    "uiConfig" : { },
+    "nodes" : {
+      "ae5e3198-27cd-46b7-b705-47ad1c14314e" : {
+        "displayName" : "Zero Page Login Collector",
+        "nodeType" : "ZeroPageLoginNode",
+        "x" : 229,
+        "y" : 20,
+        "connections" : {
+          "true" : "70e691a5-1e33-4ac3-a356-e7b6d60d92e0",
+          "false" : "e301438c-0bd0-429c-ab0c-66126501069a"
+        }
+      }
+    }
+  }
+}

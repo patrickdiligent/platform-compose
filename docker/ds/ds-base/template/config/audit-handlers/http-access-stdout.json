@@ -1,0 +1,11 @@
+{
+    "class": "org.forgerock.audit.handlers.json.stdout.JsonStdoutAuditEventHandler",
+    "config": {
+        "enabled": true,
+        "name": "http.access.stdout",
+        "elasticsearchCompatible" : false,
+        "topics": [
+            "http-access"
+        ]
+    }
+}

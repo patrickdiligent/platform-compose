@@ -1,0 +1,7 @@
+/*
+ * Copyright 2019-2020 ForgeRock AS. All Rights Reserved
+ */
+
+connect http://localhost:8080/am -k /home/forgerock/openam/security/keys/amster/amster_rsa
+import-config --path /opt/amster/config/ --clean true
+:exit

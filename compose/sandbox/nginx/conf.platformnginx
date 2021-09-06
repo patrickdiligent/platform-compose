@@ -1,0 +1,87 @@
+#
+regexp=\\x22
+replace="
+======
+#
+regexp=GET.+(HTTP/\d\.\d")
+colours=underline reverse "\033[38;5;194m","\033[38;5;59m"
+======
+#
+regexp=POST.+(HTTP/\d\.\d")
+colours=underline reverse "\033[38;5;39m","\033[38;5;59m"
+======
+#
+regexp=PATCH.+(HTTP/\d\.\d")
+colours=underline reverse magenta,"\033[38;5;59m"
+======
+#
+regexp=PUT.+(HTTP/\d\.\d")
+colours=underline reverse yellow,"\033[38;5;59m"
+======
+#
+regexp=DELETE.+(HTTP/\d\.\d\s")
+colours=underline reverse red,"\033[38;5;59m"
+======
+#
+regexp=SSO TOKEN(:\s)(\"[^"]*")
+colours=underline "\033[38;5;141m",default,"\033[38;5;103m"
+======
+#
+regexp=\s"(https?://.+[^"])(".*"$)
+colours="\033[38;5;59m","\033[38;5;30m","\033[38;5;59m"
+======
+#
+regexp=OAUTH_REQUEST_ATTRIBUTES:\s"[^"]*"
+colours="\033[38;5;59m"
+======
+#
+regexp=^.+\[(.*)\](\s")
+colours="\033[38;5;60m",underline "\033[38;5;73m", "\033[38;5;59m"
+======
+#
+regexp=(3\d{2})\s(\d{1,})
+colours="\033[38;5;59m",reverse blue
+======
+#
+regexp=(2\d{2})\s(\d{1,})
+colours="\033[38;5;59m",reverse green
+======
+#
+regexp=(4\d{2})\s(\d{1,})
+colours="\033[38;5;59m",reverse red
+======
+#
+regexp=(5\d{2})\s(\d{1,})
+colours="\033[38;5;59m",reverse red
+======
+#
+regexp=AM->IDM
+colours=reverse white
+======
+#
+regexp=IDM->AM
+colours=reverse white
+======
+#
+regexp=BODY(\s".*")(.+Authorization)
+colours=underline "\033[38;5;109m","\033[38;5;66m",none
+=======
+#
+regexp=BODY "-"
+colours="\033[38;5;59m"
+=======
+#
+regexp=Authorization(:\s"Bearer\s)([^"]*")
+colours=underline "\033[38;5;105m","\033[38;5;59m","\033[38;5;60m"
+=======
+#
+regexp=Authorization(:\s"Basic\s)([^"]*")
+colours=underline "\033[38;5;105m","\033[38;5;59m","\033[38;5;60m"
+=======
+#
+regexp=Authorization: "-"
+colours="\033[38;5;59m"
+=======
+#
+regexp=\|
+colours=black

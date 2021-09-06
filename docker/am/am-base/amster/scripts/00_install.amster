@@ -1,0 +1,27 @@
+/*
+ * Copyright 2019-2020 ForgeRock AS. All Rights Reserved
+ */
+
+install-openam \
+   --serverUrl http://localhost:8080/am \
+   --cookieDomain "example.com" \
+   --adminPwd "password" \
+   --pwdEncKey "C00lBeans" \
+   --cfgDir /home/forgerock/openam \
+   --cfgStore "embedded" \
+   --cfgStoreAdminPort "4444" \
+   --cfgStoreDirMgr "cn=Directory Manager" \
+   --cfgStoreDirMgrPwd "password" \
+   --cfgStoreHost "localhost" \
+   --cfgStoreJmxPort "1689" \
+   --cfgStorePort "50636" \
+   --cfgStoreRootSuffix "ou=am-config" \
+   --cfgStoreSsl "SSL" \
+   --userStoreType "LDAPv3ForOpenDS" \
+   --userStoreHost "localhost" \
+   --userStorePort "50636" \
+   --userStoreDirMgr "cn=Directory Manager" \
+   --userStoreDirMgrPwd "password" \
+   --userStoreRootSuffix "ou=identities" \
+   --userStoreSsl "SIMPLE" \
+   --acceptLicense

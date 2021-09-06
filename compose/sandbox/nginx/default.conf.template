@@ -1,0 +1,104 @@
+
+log_format  useragent  '$remote_addr - $remote_user [$time_local] "$request" | BODY "$request_body" | '
+                    'Authorization: "$http_authorization" | '
+                    'SSO TOKEN: "$cookie_iPlanetDirectoryPro" | OAUTH_REQUEST_ATTRIBUTES: "$cookie_OAUTH_REQUEST_ATTRIBUTES"'
+                    '| $status $body_bytes_sent "$http_referer" '
+                    '"$http_x_forwarded_for"';
+
+log_format  am2idm  'AM->IDM $remote_addr - $remote_user [$time_local] "$request" | BODY "$request_body" | '
+                    'Authorization: "$http_authorization" | '
+                    'SSO TOKEN: "$cookie_iPlanetDirectoryPro" | OAUTH_REQUEST_ATTRIBUTES: "$cookie_OAUTH_REQUEST_ATTRIBUTES"'
+                    '| $status $body_bytes_sent "$http_referer" '
+                    '"$http_x_forwarded_for"'; 
+
+log_format  idm2am  'IDM->AM $remote_addr - $remote_user [$time_local] "$request" | BODY "$request_body" | '
+                    'Authorization: "$http_authorization" | '
+                    'SSO TOKEN: "$cookie_iPlanetDirectoryPro" | OAUTH_REQUEST_ATTRIBUTES: "$cookie_OAUTH_REQUEST_ATTRIBUTES"'
+                    '| $status $body_bytes_sent "$http_referer" '
+                    '"$http_x_forwarded_for"';                    
+access_log off;
+
+server {
+    
+    listen 80;
+    listen 443 ssl;
+    ssl_certificate /etc/nginx/ssl.crt;
+    ssl_certificate_key /etc/nginx/ssl-key.pem;
+
+    server_name  ${SERVER_NAME};
+    
+    access_log  /var/log/nginx/access.log  useragent;
+
+    rewrite ^/login([^/].*)$ /login/$1 break;
+    rewrite ^/enduser([^/].*)$ /enduser/$1 break;
+    rewrite ^/platform([^/].*)$ /platform/$1 break;
+    rewrite ^/am/XUI([^/].*)$ /am/XUI/$1 break;
+    rewrite ^/am([^/].*)$ /am/$1 break;
+
+    proxy_buffer_size 128k;
+    proxy_buffers 4 256k;
+    proxy_busy_buffers_size    256k;
+
+    location /am/XUI/ {
+        proxy_pass http://loginUI:8080/;
+    }
+    
+    # location = /am/XUI/main-authorize.js {
+    #     proxy_pass http://${AM_FQDN}:8080;
+    # }
+
+    location /am/ {
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_pass http://am:8080;
+    }
+
+    location ~ /(admin|openidm|api)/? {
+        proxy_pass http://idm:8080;
+    }
+
+    location /enduser/ {
+        proxy_pass http://enduserUI:8080/;
+    }
+
+    location /platform/ {
+        proxy_pass http://adminUI:8080/;
+    }
+
+    location /login/ {
+        proxy_pass http://loginUI:8080/;
+    }
+
+}
+
+# server {
+#     listen 8080;
+
+#     server_name  am.example.com;
+
+#     access_log  /var/log/nginx/access.log  idm2am;
+
+#     proxy_buffer_size 128k;
+#     proxy_buffers 4 256k;
+#     proxy_busy_buffers_size    256k;
+
+#     location / {
+#         proxy_pass http://openam.example.com:8080;
+#     }
+# }
+
+# server {
+#     listen 8080;
+
+#     server_name  openidm.example.com;
+
+#     access_log  /var/log/nginx/access.log  am2idm;
+
+#     proxy_buffer_size 128k;
+#     proxy_buffers 4 256k;
+#     proxy_busy_buffers_size    256k;
+
+#     location / {
+#         proxy_pass http://idm.example.com:8080;
+#     }
+# }
