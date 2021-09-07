@@ -18,6 +18,12 @@ x-common-variables-properties: &platform-properties
 
 services:
 
+  java-11:
+    build: $DOCKER/java-11
+    image: ${REGISTRY}/java-11
+    deploy: 
+      replicas: 0
+      
   ds-base:
     build: 
       context: $DOCKER/ds/ds-base
@@ -70,12 +76,6 @@ services:
     volumes:
       - ctsdata:/opt/opendj/data
       - ./security/ds:/opt/opendj/secrets
-
-  java-11:
-    build: $DOCKER/java-11
-    image: ${REGISTRY}/java-11
-    deploy: 
-      replicas: 0
   
   amster:
     build:       
