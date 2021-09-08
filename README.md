@@ -12,7 +12,7 @@ Note: make sure the docker image have enough resources (I boosted Docker Desktop
 1. Clone the git repository
 	```bash
 	$ mkdir /path/to/project; cd /path/to/project
-	$ git@bitbucket.org:patrickdiligentfr/docker-compose.git
+	$ git@bitbucket.org:patrickdiligentfr/forgeops-compose.git
 	$ cd forgeops-compose
 	```
 1. Copy the Product packages
