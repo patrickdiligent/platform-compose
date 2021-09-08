@@ -49,13 +49,13 @@ Note: make sure the docker image have enough resources (I boosted Docker Desktop
 1. Propagate the configuration to be baked into the Docker images:
 
 	```bash
-		$ cd docker-dev/compose/sandbox
+		$ cd forgeops-compose/compose/sandbox
 		$ bin/init-config.sh
 	```
 
 1. Build the Docker Images
 	```bash
-	$ cd docker-dev/compose/sandbox
+	$ cd forgeops-compose/compose/sandbox
 	$ docker-compose build
 	```
 
@@ -88,7 +88,7 @@ Note: make sure the docker image have enough resources (I boosted Docker Desktop
 
 * To export the configuration (from a running deployment):
 	```bash
-		$ cd docker-dev/compose/sandbox
+		$ cd forgeops-compose/compose/sandbox
 		$ bin/export-config.sh
 	```
 	The configuration is exported in `docker-dev/config/stage`
@@ -96,7 +96,7 @@ Note: make sure the docker image have enough resources (I boosted Docker Desktop
 * To save the configuration (and further commit after verification):
 
 	```bash
-		$ cd docker-dev/compose/sandbox
+		$ cd forgeops-compose/compose/sandbox
 		$ bin/save-config.sh
 	```
 	This saves the configuration to `docker-dev/config/idm, am, amster`. It is ready to be committed.
@@ -106,7 +106,7 @@ Note: make sure the docker image have enough resources (I boosted Docker Desktop
 * To build new images with the new configuration:
 
 	```bash
-		$ cd docker-dev/compose/sandbox
+		$ cd forgeops-compose/compose/sandbox
 		$ bin/init-config.sh
 		$ docker-compose build
 	```
