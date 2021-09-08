@@ -12,9 +12,8 @@ Note: make sure the docker image have enough resources (I boosted Docker Desktop
 1. Clone the git repository
 	```bash
 	$ mkdir /path/to/project; cd /path/to/project
-	$ git clone https://stash.forgerock.org/scm/~patrickdiligent/docker-dev.git
-	$ git checkout 7.1-FBC
-	$ cd docker-dev
+	$ git@bitbucket.org:patrickdiligentfr/docker-compose.git
+	$ cd forgeops-compose
 	```
 1. Copy the Product packages
 	```bash
