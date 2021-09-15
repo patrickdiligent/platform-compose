@@ -230,6 +230,7 @@
       "com.sun.identity.saml.xmlsig.storepass=%BASE_DIR%/security/secrets/default/.storepass",
       "org.forgerock.services.uma.pendingrequests.store.ssl.enabled=&{am.stores.uma.ssl.enabled|false}",
       "com.sun.identity.session.repository.enableEncryption=false",
+      "org.forgerock.security.oauth2.enforce.sub.claim.uniqueness=true",
       "org.forgerock.services.default.store.min.connections=",
       "com.sun.identity.password.deploymentDescriptor=%SERVER_URI%",
       "com.iplanet.am.buildRevision=4e72fe392c000b0a15027eb41267d01bfd2d2220",
