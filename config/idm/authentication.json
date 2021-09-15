@@ -27,7 +27,7 @@
         },
         "staticUserMapping" : [
             {
-                "subject" : "amadmin",
+                "subject" : "(usr!amadmin)",
                 "localUser" : "internal/user/openidm-admin",
                 "roles" : [
                     "internal/role/openidm-authorized",
@@ -35,7 +35,7 @@
                 ]
             },
             {
-                "subject": "idm-provisioning",
+                "subject": "(age!idm-provisioning)",
                 "localUser": "internal/user/idm-provisioning",
                 "roles" : [
                     "internal/role/platform-provisioning"
