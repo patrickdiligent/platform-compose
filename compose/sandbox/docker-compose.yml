@@ -242,6 +242,14 @@ services:
       - SERVER_NAME=$FQDN
     command: /bin/bash -c "envsubst '$${SERVER_NAME} $${AM_FQDN}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
 
+  mail-mock:
+    image: mailhog/mailhog
+    container_name: smtp.sdx.local
+    networks:
+      net:
+    ports:
+      - 8025:8025
+      
 networks:
   net:
 
