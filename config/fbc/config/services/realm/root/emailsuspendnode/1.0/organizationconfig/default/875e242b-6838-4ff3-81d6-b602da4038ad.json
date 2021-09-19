@@ -1,0 +1,30 @@
+{
+  "metadata" : {
+    "realm" : "/",
+    "entityType" : "EmailSuspendNode",
+    "entityId" : "default/875e242b-6838-4ff3-81d6-b602da4038ad",
+    "uid" : "ou=875e242b-6838-4ff3-81d6-b602da4038ad,ou=default,ou=OrganizationConfig,ou=1.0,ou=EmailSuspendNode,ou=services,ou=am-config",
+    "sunServiceID" : "instance",
+    "objectClass" : [
+      "top",
+      "sunServiceComponent"
+    ],
+    "pathParams" : { },
+    "ou" : null
+  },
+  "data" : {
+    "_id" : "default/875e242b-6838-4ff3-81d6-b602da4038ad",
+    "_type" : {
+      "_id" : "EmailSuspendNode",
+      "name" : "EmailSuspendNode",
+      "collection" : false
+    },
+    "emailTemplateName" : "registration",
+    "emailAttribute" : "mail",
+    "emailSuspendMessage" : {
+      "en" : "An email has been sent to the address you entered. Click the link in that email to proceed."
+    },
+    "objectLookup" : false,
+    "identityAttribute" : "userName"
+  }
+}
