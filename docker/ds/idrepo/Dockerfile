@@ -1,7 +1,4 @@
-ARG registry=sandbox
-ARG docker_tag=7.1.0
-FROM ${registry}/ds-base:${docker_tag}
-
+FROM gcr.io/forgerock-io/ds:7.1.0
 # If you want to update any o/s software, or require root access, uncomment the lines below
 # Ensure that the /opt/opendj is owned by forgeorock:root
 # USER root

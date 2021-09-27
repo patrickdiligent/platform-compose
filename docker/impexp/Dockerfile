@@ -1,16 +1,14 @@
 
-ARG registry=sandbox
+FROM gcr.io/forgerock-io/amster:7.1.0
 
-FROM ${registry}/amster:7.1.0
+# USER root
 
-USER root
-
-ENV DEBIAN_FRONTEND=noninteractive
-ENV APT_OPTS="--no-install-recommends --yes"
-RUN apt-get update \
-        && apt-get install -y openldap-utils jq inotify-tools \
-        && apt-get clean \
-        && rm -r /var/lib/apt/lists /var/cache/apt/archives
+# ENV DEBIAN_FRONTEND=noninteractive
+# ENV APT_OPTS="--no-install-recommends --yes"
+# RUN apt-get update \
+#         && apt-get install -y openldap-utils jq inotify-tools \
+#         && apt-get clean \
+#         && rm -r /var/lib/apt/lists /var/cache/apt/archives
 
 USER forgerock
 

@@ -6,7 +6,7 @@ SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 source ${SCRIPTPATH}/../.env
 source ${SCRIPTPATH}/realpath.sh
 
-IMAGE=${REGISTRY}/amupgrade
+IMAGE=$gcr.io/forgerock-io/am-config-upgrader:7.1.0
 
 CONFIG_DIR=$(abs_path ${SCRIPTPATH}/../../../config/fbc)
 RULES_DIR=$(abs_path ${SCRIPTPATH}/../../../config/am-upgrader-rules)

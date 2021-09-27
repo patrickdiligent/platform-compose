@@ -1,7 +1,5 @@
 
-ARG registry=sandbox
-ARG docker_tag=7.1.0
-FROM ${registry}/am-base:${docker_tag} 
+FROM gcr.io/forgerock-io/am-base:7.1.0
 
 USER root
 

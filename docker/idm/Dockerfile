@@ -1,7 +1,5 @@
 # Note: M5 integration with AM currently not working
-ARG registry=sandbox
-ARG docker_tag=7.1.0
-FROM ${registry}/idm-base:${docker_tag}
+FROM gcr.io/forgerock-io/idm:7.1.0
 
 # Harden IDM by removing the Felix OSGI Console. Unless you are a ForgeRock developer, the
 # console is rarely required. Your configuration should NOT include conf/felix.webconsole.json

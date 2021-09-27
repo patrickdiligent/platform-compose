@@ -17,37 +17,16 @@ x-common-variables-properties: &platform-properties
     - PLATFORM_UI_LOCALE=en
 
 services:
-
-  java-11:
-    build: $DOCKER/java-11
-    image: ${REGISTRY}/java-11
-    deploy: 
-      replicas: 0
-      
-  ds-base:
-    build: 
-      context: $DOCKER/ds/ds-base
-      args:
-        - registry=${REGISTRY}
-    image: ${REGISTRY}/ds-base:${VERSION}
-    deploy: 
-      replicas: 0
-      
   idrepo:
     build: 
       context: $DOCKER/ds
       dockerfile: $DOCKER/ds/idrepo/Dockerfile
-      args: 
-        - docker_tag=${VERSION}
-        - registry=${REGISTRY}
     image: ${REGISTRY}/ds-idrepo:${VERSION}
-    container_name: idrepo.sdx.local
+    container_name: idrepo.local
     environment:
       - DS_SET_UID_ADMIN_AND_MONITOR_PASSWORDS=true
       - DS_UID_ADMIN_PASSWORD=password
       - DS_UID_MONITOR_PASSWORD=password
-    networks:
-      net:
     ports:
       - 389:1389
     volumes:
@@ -59,13 +38,8 @@ services:
     build: 
       context: $DOCKER/ds
       dockerfile: $DOCKER/ds/cts/Dockerfile
-      args: 
-        - docker_tag=${VERSION}
-        - registry=${REGISTRY}
     image: ${REGISTRY}/ds-cts:${VERSION}
-    container_name: cts.sdx.local
-    networks:
-      net:
+    container_name: cts.local
     ports:
       - 1389:1389
     environment:
@@ -77,49 +51,12 @@ services:
       - ctsdata:/opt/opendj/data
       - ./security/ds:/opt/opendj/secrets
   
-  amster:
-    build:       
-      context: $DOCKER/am
-      dockerfile: $DOCKER/am/amster/Dockerfile
-      args:
-        - registry=${REGISTRY}
-    image: ${REGISTRY}/amster:${VERSION}
-    deploy: 
-      replicas: 0
-
-  am-empty:
-    build: 
-      context: $DOCKER/am
-      dockerfile: $DOCKER/am/am-empty/Dockerfile
-    image: ${REGISTRY}/am-empty:${VERSION}
-    deploy: 
-      replicas: 0
-
-  am-base:
-    build: 
-      context: $DOCKER/am
-      dockerfile: $DOCKER/am/am-base/Dockerfile
-      args: 
-        - docker_tag=${VERSION}
-        - registry=${REGISTRY}
-    image: ${REGISTRY}/am-base:${VERSION}
-    deploy: 
-      replicas: 0
-
   am:
-    build:
-      context: $DOCKER/am/am
-      args:
-        - docker_tag=${VERSION}
-        - registry=${REGISTRY}
+    build: $DOCKER/am/am
     image: ${REGISTRY}/am:${VERSION}
     container_name: ${AM_CONTAINER}
     ports:
       - 8080:8080
-    networks:
-      net:
-        aliases:
-        - openam.example.com
     depends_on:
       - cts
       - idrepo
@@ -150,39 +87,9 @@ services:
     volumes:
       - ./security/amster:/var/run/secrets
     command: import-export
-    networks:
-      net:
-    # deploy:
-    #   replicas: 0
-
-  amupgrade:
-    image: ${REGISTRY}/amupgrade
-    build:
-      context: ${DOCKER}/am
-      dockerfile: ${DOCKER}/am/amupgrade/Dockerfile
-      args:
-        - registry=${REGISTRY}
-    volumes:
-      - ${DOCKER-DIR}/am/am:/am-config
-      - ../../config/am-upgrader-rules:/rules
-    deploy: 
-      replicas: 0
-    
-  idm-base:
-    build: 
-      context: $DOCKER/idm/idm-base
-      args:
-        - registry=${REGISTRY}
-    image: ${REGISTRY}/idm-base:${VERSION}
-    deploy:
-      replicas: 0
 
   idm:
-    build: 
-      context: $DOCKER/idm/idm
-      args:
-        - registry=${REGISTRY}
-        - docker_tag=${VERSION}
+    build: $DOCKER/idm
     image: ${REGISTRY}/idm:${VERSION}
     container_name: ${IDM_CONTAINER}
     volumes:
@@ -196,39 +103,25 @@ services:
       - OPENIDM_SECONDARY_REPO_HOST=idrepo1
       - OPENIDM_KEYSTORE_LOCATION=/var/run/secrets/idm/keystore.jceks
       - OPENIDM_TRUSTSTORE_LOCATION=/var/run/secrets/idm/truststore
-    networks:
-      net:
 
   adminUI:
     image: gcr.io/forgerock-io/platform-admin-ui:7.1.0
     container_name: adminui.sdx.local
-    networks:
-      net:
     environment: *platform-properties
   
   enduserUI:
     image: gcr.io/forgerock-io/platform-enduser-ui:7.1.0
     container_name: enduserui.sdx.local
-    networks:
-      net:
     environment: *platform-properties
 
   loginUI:
     image: gcr.io/forgerock-io/platform-login-ui:7.1.0
     container_name: loginui.sdx.local
-    networks:
-      net:
     environment: *platform-properties
 
   nginx:
     image: nginx
-    container_name: nginx.sdx.local
-    networks:
-      net:
-        aliases:
-        - openidm.example.com
-        - am.example.com
-        - demo.example.com
+    container_name: nginx.local
     ports:
       - 443:443
     depends_on:
@@ -244,15 +137,10 @@ services:
 
   mail-mock:
     image: mailhog/mailhog
-    container_name: smtp.sdx.local
-    networks:
-      net:
+    container_name: smtp.local
     ports:
       - 8025:8025
-      
-networks:
-  net:
-
+        
 volumes:
   shared:
   idrepodata:
