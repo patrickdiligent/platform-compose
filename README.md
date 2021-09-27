@@ -10,7 +10,7 @@ ForgeRock shall not be liable for any direct, indirect or consequential damages 
 
 ### Synopsis
 
-Deploy the ForgeRock 7.1 platform on docker containers with docker-compose orchestration, and using the vanilla (almost) ForgeRock base docker images;  this is targetted at testing/learning/experimentation/development, this is not with production in mind.
+Deploy the ForgeRock 7.1 platform on docker containers with docker-compose orchestration, and using the ForgeRock base docker images;  this is targetted at testing/learning/experimentation/development, this is not with production in mind.
 
 ### In a nutshell
 
@@ -19,15 +19,8 @@ Note: make sure the docker image have enough resources (I boosted Docker Desktop
 1. Clone the git repository
 	```bash
 	$ mkdir /path/to/project; cd /path/to/project
-	$ git clone git@bitbucket.org:patrickdiligentfr/forgeops-compose.git
-	$ cd forgeops-compose
-	```
-1. Copy the Product packages
-	```bash
-	$ cd docker/am/build; unzip /path/to/AM-7.1.0.zip
-	$ cd docker/am/build/amster; unzip /path/to/Amster-7.1.0.zip
-	$ cp /path/to/IDM-7.1.0.zip docker/idm/idm-base/
-	$ cp /path/to/DS-7.1.0.zip docker/ds/ds-base/
+	$ git clone git@bitbucket.org:patrickdiligentfr/pats-fr-compose.git
+	$ cd pats-fr-compose
 	```
 1. Adjust the FQDN variable in `compose/sandbox/.env`. Default is `platform.example.com`. 
 
@@ -56,13 +49,13 @@ Note: make sure the docker image have enough resources (I boosted Docker Desktop
 1. Propagate the configuration to be baked into the Docker images:
 
 	```bash
-		$ cd forgeops-compose/compose/sandbox
+		$ cd pats-fr-compose/compose/sandbox
 		$ bin/init-config.sh
 	```
 
 1. Build the Docker Images
 	```bash
-	$ cd forgeops-compose/compose/sandbox
+	$ cd pats-fr-compose/compose/sandbox
 	$ docker-compose build
 	```
 
@@ -76,7 +69,7 @@ Note: make sure the docker image have enough resources (I boosted Docker Desktop
 		$ cd compose/sandbox
 		$ docker-compose up
 		```
-		And wait for the initialisation to complete (Wait for `"impexp.sdx.local     | Export completed successfully")` in the log.
+		And wait for the initialisation to complete (Wait for `"impexp.local     | Export completed successfully")` in the log.
 
 	1. Point the browser to `https://<FQDN>/am` for the AM admin UI - `amadmin`/`password`
 	1. Point the browser to `https://<FQDN>/admin` for the IDM admin ui - `amadmin`/`password`
@@ -87,33 +80,33 @@ Note: make sure the docker image have enough resources (I boosted Docker Desktop
 1. Optional, generate sample user data to play with:
 
 	```bash
-	$ docker exec -it idrepo.sdx.local /opt/opendj/bin/make-users.sh 200
+	$ docker exec -it idrepo.local /opt/opendj/bin/make-users.sh 200
 	```
 #### Config Versioning
 
-* The versioned config is located under `docker-dev/config`
+* The versioned config is located under `pats-fr-compose/config`
 
 * To export the configuration (from a running deployment):
 	```bash
-		$ cd forgeops-compose/compose/sandbox
+		$ cd pats-fr-compose/compose/sandbox
 		$ bin/export-config.sh
 	```
-	The configuration is exported in `docker-dev/config/stage`
+	The configuration is exported in `pats-fr-compose/config/stage`
 
 * To save the configuration (and further commit after verification):
 
 	```bash
-		$ cd forgeops-compose/compose/sandbox
+		$ cd pats-fr-compose/compose/sandbox
 		$ bin/save-config.sh
 	```
-	This saves the configuration to `docker-dev/config/idm, am, amster`. It is ready to be committed.
+	This saves the configuration to `dpats-fr-compose/config/idm, am, amster`. It is ready to be committed.
 
 	`save-config.sh` runs `upgrade-config.sh` replacing selected values with their respective configuration placeholders, and replacing encrypted password values with clear a configured clear text value for selected IG agents and OAuth2 clients. 
 
 * To build new images with the new configuration:
 
 	```bash
-		$ cd forgeops-compose/compose/sandbox
+		$ cd pats-fr-compose/compose/sandbox
 		$ bin/init-config.sh
 		$ docker-compose build
 	```
@@ -130,7 +123,7 @@ NGINX log with colour highlights:
 ```
 $ brew install grc
 $ cp nginx/conf.platformnginx ~/.grc
-$ grc --config conf.platformnginx docker logs -f platform_nginx_1
+$ grc --config conf.platformnginx docker logs -f nginx.local
 ```
 
 More info at the [grcat project page](https://github.com/garabik/grc).

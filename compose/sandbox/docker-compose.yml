@@ -106,17 +106,17 @@ services:
 
   adminUI:
     image: gcr.io/forgerock-io/platform-admin-ui:7.1.0
-    container_name: adminui.sdx.local
+    container_name: adminui.local
     environment: *platform-properties
   
   enduserUI:
     image: gcr.io/forgerock-io/platform-enduser-ui:7.1.0
-    container_name: enduserui.sdx.local
+    container_name: enduserui.local
     environment: *platform-properties
 
   loginUI:
     image: gcr.io/forgerock-io/platform-login-ui:7.1.0
-    container_name: loginui.sdx.local
+    container_name: loginui.local
     environment: *platform-properties
 
   nginx:
