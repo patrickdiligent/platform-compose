@@ -17,8 +17,8 @@ Note: make sure the docker image have enough resources (I boosted Docker Desktop
 1. Clone the git repository
 	```bash
 	$ mkdir /path/to/project; cd /path/to/project
-	$ git clone git@bitbucket.org:patrickdiligentfr/pats-fr-compose.git
-	$ cd pats-fr-compose
+	$ git clone ssh://git@stash.forgerock.org:7999/proserv/platform-compose.git
+	$ cd platform-compose
 	```
 1. Adjust the FQDN variable in `compose/sandbox/.env`. Default is `platform.example.com`. 
 
@@ -47,13 +47,13 @@ Note: make sure the docker image have enough resources (I boosted Docker Desktop
 1. Propagate the configuration to be baked into the Docker images:
 
 	```bash
-		$ cd pats-fr-compose/compose/sandbox
+		$ cd platform-compose/compose/sandbox
 		$ bin/init-config.sh
 	```
 
 1. Build the Docker Images
 	```bash
-	$ cd pats-fr-compose/compose/sandbox
+	$ cd platform-compose/compose/sandbox
 	$ docker-compose build
 	```
 
@@ -82,29 +82,29 @@ Note: make sure the docker image have enough resources (I boosted Docker Desktop
 	```
 #### Config Versioning
 
-* The versioned config is located under `pats-fr-compose/config`
+* The versioned config is located under `platform-compose/config`
 
 * To export the configuration (from a running deployment):
 	```bash
-		$ cd pats-fr-compose/compose/sandbox
+		$ cd platform-compose/compose/sandbox
 		$ bin/export-config.sh
 	```
-	The configuration is exported in `pats-fr-compose/config/stage`
+	The configuration is exported in `platform-compose/config/stage`
 
 * To save the configuration (and further commit after verification):
 
 	```bash
-		$ cd pats-fr-compose/compose/sandbox
+		$ cd platform-compose/compose/sandbox
 		$ bin/save-config.sh
 	```
-	This saves the configuration to `dpats-fr-compose/config/idm, am, amster`. It is ready to be committed.
+	This saves the configuration to `platform-compose/config/idm, am, amster`. It is ready to be committed.
 
 	`save-config.sh` runs `upgrade-config.sh` replacing selected values with their respective configuration placeholders, and replacing encrypted password values with clear a configured clear text value for selected IG agents and OAuth2 clients. 
 
 * To build new images with the new configuration:
 
 	```bash
-		$ cd pats-fr-compose/compose/sandbox
+		$ cd platform-compose/compose/sandbox
 		$ bin/init-config.sh
 		$ docker-compose build
 	```
