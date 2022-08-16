@@ -23,7 +23,7 @@
     },
     "_id" : "defaultconfig",
     "validGotoDestinations" : [
-      "&{lb.protocol|https}://&{fqdn}/*?*"
+      "&{am.server.protocol|https}://&{fqdn}/*?*"
     ]
   }
 }

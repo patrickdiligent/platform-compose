@@ -10,34 +10,9 @@
       "sunServiceComponent"
     ],
     "pathParams" : { },
-    "ou" : [
-      "Registration"
-    ]
+    "ou" : null
   },
   "data" : {
-    "_id" : "default/Registration",
-    "_type" : {
-      "_id" : "authenticationTreesService",
-      "name" : "authenticationTreesService",
-      "collection" : false
-    },
-    "staticNodes" : {
-      "startNode" : {
-        "x" : 50,
-        "y" : 25
-      },
-      "70e691a5-1e33-4ac3-a356-e7b6d60d92e0" : {
-        "x" : 1211,
-        "y" : 102
-      },
-      "e301438c-0bd0-429c-ab0c-66126501069a" : {
-        "x" : 990,
-        "y" : 302
-      }
-    },
-    "entryNodeId" : "0c091c49-f3af-48fb-ac6f-07fba0499dd6",
-    "description" : "Platform Registration Tree",
-    "uiConfig" : { },
     "nodes" : {
       "0c091c49-f3af-48fb-ac6f-07fba0499dd6" : {
         "displayName" : "Page Node",
@@ -45,14 +20,14 @@
         "x" : 261,
         "y" : 168,
         "connections" : {
-          "outcome" : "875e242b-6838-4ff3-81d6-b602da4038ad"
+          "outcome" : "ad5dcbb3-7335-49b7-b3e7-7d850bb88237"
         }
       },
       "ad5dcbb3-7335-49b7-b3e7-7d850bb88237" : {
         "displayName" : "Create Object",
         "nodeType" : "CreateObjectNode",
-        "x" : 752,
-        "y" : 189,
+        "x" : 537,
+        "y" : 206,
         "connections" : {
           "FAILURE" : "e301438c-0bd0-429c-ab0c-66126501069a",
           "CREATED" : "97a15eb2-a015-4b6d-81a0-be78c3aa1a3b"
@@ -61,21 +36,35 @@
       "97a15eb2-a015-4b6d-81a0-be78c3aa1a3b" : {
         "displayName" : "Increment Login Count",
         "nodeType" : "IncrementLoginCountNode",
-        "x" : 940,
-        "y" : 136,
+        "x" : 681,
+        "y" : 144,
         "connections" : {
           "outcome" : "70e691a5-1e33-4ac3-a356-e7b6d60d92e0"
         }
-      },
-      "875e242b-6838-4ff3-81d6-b602da4038ad" : {
-        "displayName" : "Email Suspend Node",
-        "nodeType" : "EmailSuspendNode",
-        "x" : 560,
-        "y" : 389,
-        "connections" : {
-          "outcome" : "ad5dcbb3-7335-49b7-b3e7-7d850bb88237"
-        }
       }
-    }
+    },
+    "staticNodes" : {
+      "startNode" : {
+        "x" : 50,
+        "y" : 25
+      },
+      "70e691a5-1e33-4ac3-a356-e7b6d60d92e0" : {
+        "x" : 905,
+        "y" : 171
+      },
+      "e301438c-0bd0-429c-ab0c-66126501069a" : {
+        "x" : 741,
+        "y" : 293
+      }
+    },
+    "entryNodeId" : "0c091c49-f3af-48fb-ac6f-07fba0499dd6",
+    "_type" : {
+      "_id" : "authenticationTreesService",
+      "name" : "authenticationTreesService",
+      "collection" : false
+    },
+    "description" : "Platform Registration Tree",
+    "_id" : "default/Registration",
+    "uiConfig": { "categories" : "[\"Registration\"]" }
   }
 }

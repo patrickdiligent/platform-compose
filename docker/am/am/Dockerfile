@@ -1,5 +1,5 @@
 
-FROM gcr.io/forgerock-io/am-base:7.1.0
+FROM gcr.io/forgerock-io/am-base:7.2.0
 
 USER root
 

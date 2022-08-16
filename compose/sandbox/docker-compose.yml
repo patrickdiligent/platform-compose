@@ -73,6 +73,7 @@ services:
       - AM_SERVER_FQDN=${AM_FQDN}
       - AM_ENCRYPTION_KEY=C00lbeans
       - PLATFORM_UI_IS_FRAAS=false
+      - VERSION=${VERSION}
 
   impexp:
     image: ${REGISTRY}/impexp
@@ -105,17 +106,17 @@ services:
       - OPENIDM_TRUSTSTORE_LOCATION=/var/run/secrets/idm/truststore
 
   adminUI:
-    image: gcr.io/forgerock-io/platform-admin-ui:7.1.0
+    image: gcr.io/forgerock-io/platform-admin-ui:7.2.0
     container_name: adminui.local
     environment: *platform-properties
   
   enduserUI:
-    image: gcr.io/forgerock-io/platform-enduser-ui:7.1.0
+    image: gcr.io/forgerock-io/platform-enduser-ui:7.2.0
     container_name: enduserui.local
     environment: *platform-properties
 
   loginUI:
-    image: gcr.io/forgerock-io/platform-login-ui:7.1.0
+    image: gcr.io/forgerock-io/platform-login-ui:7.2.0
     container_name: loginui.local
     environment: *platform-properties
 

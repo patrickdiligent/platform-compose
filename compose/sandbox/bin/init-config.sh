@@ -22,9 +22,10 @@ echo "Copying dynamic config from ${AMSTER_DIR} to ${IMPORT_DOCKER_DIR}"
 cp -r $AMSTER_DIR ${IMPORT_DOCKER_DIR}
 
 echo "============ IDM Config ====================================="
-IDM_DOCKER_DIR=$(abs_path ${SCRIPTPATH}/../../../docker/idm/conf)
+IDM_DOCKER_DIR=$(abs_path ${SCRIPTPATH}/../../../docker/idm)
 IDM_CONFIG_DIR=$(abs_path ${SCRIPTPATH}/../../../config/idm)
 echo "cleaning ${IDM_DOCKER_DIR}"
-rm -rf ${IDM_DOCKER_DIR}
+rm -rf ${IDM_DOCKER_DIR}/conf
+rm -rf ${IDM_DOCKER_DIR}/script
 echo "Copying IDM config from $IDM_CONFIG_DIR to ${IDM_DOCKER_DIR}"
-cp -r $IDM_CONFIG_DIR ${IDM_DOCKER_DIR}
+cp -r $IDM_CONFIG_DIR/* ${IDM_DOCKER_DIR}
