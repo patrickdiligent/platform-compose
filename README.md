@@ -16,7 +16,7 @@ Note: make sure the docker image have enough resources (I boosted Docker Desktop
 
 1. Generate SSL certificate and key for the selected domain, and copy them under `compose/sandbox/nginx/certs`, as `platform-crt`, and `platform-key.pem`, as shown in the `nginx` spec:
 	
-	```yaml
+   ```yaml
 	nginx:
 		image: nginx
 
