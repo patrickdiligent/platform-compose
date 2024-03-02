@@ -1,14 +1,6 @@
-### Disclaimer
-
-The sample code described herein is provided on an "as is" basis, without warranty of any kind, to the fullest extent permitted by law. ForgeRock does not warrant or guarantee the individual success developers may have in implementing the sample code on their development platforms or in production configurations.
-
-ForgeRock does not warrant, guarantee or make any representations regarding the use, results of use, accuracy, timeliness or completeness of any data or information relating to the sample code. ForgeRock disclaims all warranties, expressed or implied, and in particular, disclaims all warranties of merchantability, and warranties related to the code, or any service or software related thereto.
-
-ForgeRock shall not be liable for any direct, indirect or consequential damages or costs of any type arising out of any action taken by you or others related to the sample code. http://forgerock.com/terms
-
 ### Synopsis
 
-Deploy the ForgeRock 7.1 platform on docker containers with docker-compose orchestration, and using the ForgeRock base docker images;  this is targetted at testing/learning/experimentation/development, this is not with production in mind.
+Deploy the ForgeRock 7.4 platform on docker containers with docker-compose orchestration, using the ForgeRock base docker images.
 
 ### In a nutshell
 
@@ -67,7 +59,7 @@ Note: make sure the docker image have enough resources (I boosted Docker Desktop
 		$ cd compose/sandbox
 		$ docker-compose up
 		```
-		And wait for the initialisation to complete (Wait for `"impexp.local     | Export completed successfully")` in the log.
+		And wait for the initialisation to complete (Wait for `"impexp.local     | Export completed successfully"` ) in the log.
 
 	1. Point the browser to `https://<FQDN>/am` for the AM admin UI - `amadmin`/`password`
 	1. Point the browser to `https://<FQDN>/admin` for the IDM admin ui - `amadmin`/`password`
@@ -75,45 +67,6 @@ Note: make sure the docker image have enough resources (I boosted Docker Desktop
 	1. Point to `http://<FQDN>/enduser` for self-service,
 	1. Point to `http://<FQDN>/login` for the central login page.
 
-1. Optional, generate sample user data to play with:
-
-	```bash
-	$ docker exec -it idrepo.local /opt/opendj/bin/make-users.sh 200
-	```
-#### Config Versioning
-
-* The versioned config is located under `platform-compose/config`
-
-* To export the configuration (from a running deployment):
-	```bash
-		$ cd platform-compose/compose/sandbox
-		$ bin/export-config.sh
-	```
-	The configuration is exported in `platform-compose/config/stage`
-
-* To save the configuration (and further commit after verification):
-
-	```bash
-		$ cd platform-compose/compose/sandbox
-		$ bin/save-config.sh
-	```
-	This saves the configuration to `platform-compose/config/idm, am, amster`. It is ready to be committed.
-
-	`save-config.sh` runs `upgrade-config.sh` replacing selected values with their respective configuration placeholders, and replacing encrypted password values with clear a configured clear text value for selected IG agents and OAuth2 clients. 
-
-* To build new images with the new configuration:
-
-	```bash
-		$ cd platform-compose/compose/sandbox
-		$ bin/init-config.sh
-		$ docker-compose build
-	```
-
-* Note that since the `idrepo` persists data on a mounted volume, comment out  these lines in `docker-compose.yaml` in the `impexp` spec, to avoid re-importing data that is already persisted:
-	```yaml
-	# deploy:
-    #   replicas: 0
-	```
 #### NGINX Logging configuration
 
 NGINX log with colour highlights:
