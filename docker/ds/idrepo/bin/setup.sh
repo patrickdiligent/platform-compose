@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
+set -e
 # Setup the directory server for the idrepo service.
 # Add in custom tuning, index creation, etc. to this file.
 
 # Profile and versions. If the schema for a profile has not been
-# changed - it may use an older version. For example, AM 7.1 still uses the 6.5 schema for configuration
+# changed - it may use an older version. For example, AM 7.3 still uses the 6.5 schema for configuration
 CONFIG="am-config:6.5"
-AM_IDENTITY_STORE="am-identity-store:7.2"
-IDM_REPO="idm-repo:7.2"
+AM_IDENTITY_STORE="am-identity-store"
+IDM_REPO="idm-repo"
 AM_CTS="am-cts:6.5"
 DS_PROXIED_SERVER="ds-proxied-server:7.0"
-# PEM_KEYS_DIRECTORY="pem-keys-directory"
-# PEM_TRUSTSTORE_DIRECTORY="pem-trust-directory"
+PEM_KEYS_DIRECTORY="pem-keys-directory"
+PEM_TRUSTSTORE_DIRECTORY="pem-trust-directory"
 
 # We also create the CTS backend for small deployments or development
 # environments where a separate CTS is not warranted.
@@ -39,15 +40,13 @@ setup-profile --profile ${CONFIG} \
 # mkdir -p $PEM_KEYS_DIRECTORY
 
 # # Set up a PEM Trust Manager Provider
-# dsconfig --offline --no-prompt --batch <<EOF
+dsconfig --offline --no-prompt --batch <<EOF
 # create-trust-manager-provider \
 #             --provider-name "PEM Trust Manager" \
 #             --type pem \
 #             --set enabled:true \
 #             --set pem-directory:${PEM_TRUSTSTORE_DIRECTORY}
-# EOF
 
-# dsconfig --offline --no-prompt --batch <<EOF
 # set-connection-handler-prop \
 #             --handler-name https \
 #             --set trust-manager-provider:"PEM Trust Manager"
@@ -62,24 +61,18 @@ setup-profile --profile ${CONFIG} \
 #             --set trust-manager-provider:"PEM Trust Manager"
 # set-administration-connector-prop \
 #             --set trust-manager-provider:"PEM Trust Manager"
-# EOF
 
 # # Delete the default PCKS12 provider.
-# dsconfig --offline --no-prompt --batch <<EOF
 # delete-trust-manager-provider \
 #             --provider-name "PKCS12"
-# EOF
 
 # # Set up a PEM Key Manager Provider
-# dsconfig --offline --no-prompt --batch <<EOF
 # create-key-manager-provider \
 #             --provider-name "PEM Key Manager" \
 #             --type pem \
 #             --set enabled:true \
 #             --set pem-directory:${PEM_KEYS_DIRECTORY}
-# EOF
 
-# dsconfig --offline --no-prompt --batch <<EOF
 # set-connection-handler-prop \
 #             --handler-name https \
 #             --set key-manager-provider:"PEM Key Manager"
@@ -96,116 +89,118 @@ setup-profile --profile ${CONFIG} \
 #             --set key-manager-provider:"PEM Key Manager"
 # set-administration-connector-prop \
 #             --set key-manager-provider:"PEM Key Manager"
-# EOF
 
 # # Delete the default PCKS12 provider.
-# dsconfig --offline --no-prompt --batch <<EOF
 # delete-key-manager-provider \
 #             --provider-name "PKCS12"
-# EOF
 
 # These indexes are required for the combined AM/IDM repo
-dsconfig --offline --no-prompt --batch <<EOF
 create-backend-index \
           --backend-name amIdentityStore \
           --set index-type:equality \
           --type generic \
           --index-name fr-idm-uuid
-EOF
+create-backend-index \
+          --backend-name amIdentityStore \
+          --set index-type:equality \
+          --index-name fr-idm-effectiveApplications
+create-backend-index \
+          --backend-name amIdentityStore \
+          --set index-type:equality \
+          --index-name fr-idm-effectiveGroup
+create-backend-index \
+          --backend-name amIdentityStore \
+          --set index-type:presence \
+          --index-name fr-idm-lastSync
 
-dsconfig --offline --no-prompt --batch <<EOF
 create-backend-index \
           --backend-name amIdentityStore \
           --set index-type:extensible \
           --index-name fr-idm-managed-user-manager \
           --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.7 \
           --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.9
-EOF
-dsconfig --offline --no-prompt --batch <<EOF
 create-backend-index \
           --backend-name amIdentityStore \
           --set index-type:extensible \
           --index-name fr-idm-managed-user-meta \
           --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.7 \
           --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.9
-EOF
-dsconfig --offline --no-prompt --batch <<EOF
 create-backend-index \
           --backend-name amIdentityStore \
           --set index-type:extensible \
           --index-name fr-idm-managed-user-notifications \
           --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.7 \
           --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.9
-EOF
-dsconfig --offline --no-prompt --batch <<EOF
 create-backend-index \
           --backend-name amIdentityStore \
           --set index-type:extensible \
           --index-name fr-idm-managed-user-roles \
           --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.7 \
           --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.9
-EOF
-dsconfig --offline --no-prompt --batch <<EOF
 create-backend-index \
           --backend-name amIdentityStore \
           --set index-type:extensible \
           --index-name fr-idm-managed-user-authzroles-internal-role \
           --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.7 \
           --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.9
-EOF
-dsconfig --offline --no-prompt --batch <<EOF
 create-backend-index \
           --backend-name amIdentityStore \
           --set index-type:extensible \
           --index-name fr-idm-managed-user-authzroles-managed-role \
           --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.7 \
           --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.9
-EOF
-dsconfig --offline --no-prompt --batch <<EOF
 create-backend-index \
         --backend-name amIdentityStore \
         --set index-type:extensible \
         --index-name fr-idm-managed-organization-owner \
         --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.7 \
         --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.9
-EOF
-dsconfig --offline --no-prompt --batch <<EOF
 create-backend-index \
         --backend-name amIdentityStore \
         --set index-type:extensible \
         --index-name fr-idm-managed-organization-admin \
         --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.7 \
         --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.9
-EOF
-dsconfig --offline --no-prompt --batch <<EOF
 create-backend-index \
         --backend-name amIdentityStore \
         --set index-type:extensible \
         --index-name fr-idm-managed-organization-member \
         --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.7 \
         --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.9
-EOF
-dsconfig --offline --no-prompt --batch <<EOF
 create-backend-index \
           --backend-name amIdentityStore \
           --set index-type:ordering \
           --type generic \
           --index-name fr-idm-managed-user-active-date
-EOF
-dsconfig --offline --no-prompt --batch <<EOF
 create-backend-index \
           --backend-name amIdentityStore \
           --set index-type:ordering \
           --type generic \
           --index-name fr-idm-managed-user-inactive-date
-EOF
-dsconfig --offline --no-prompt --batch <<EOF
 create-backend-index \
           --backend-name amIdentityStore \
           --set index-type:extensible \
           --index-name fr-idm-managed-user-groups \
           --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.7 \
           --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.9
+create-backend-index \
+        --backend-name amIdentityStore \
+        --set index-type:extensible \
+        --index-name fr-idm-managed-assignment-member \
+        --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.7 \
+        --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.9
+create-backend-index \
+        --backend-name amIdentityStore \
+        --set index-type:extensible \
+        --index-name fr-idm-managed-application-member \
+        --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.7 \
+        --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.9
+create-backend-index \
+        --backend-name amIdentityStore \
+        --set index-type:extensible \
+        --index-name fr-idm-managed-application-owner \
+        --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.7 \
+        --set index-extensible-matching-rule:1.3.6.1.4.1.36733.2.1.4.9
 EOF
 
 # Example of creating additional indexes.
@@ -215,17 +210,10 @@ EOF
 #           --backend-name amIdentityStore \
 #           --set index-type:equality \
 #           --index-name fr-attr-i1
-# EOF
-
-# dsconfig --offline --no-prompt --batch <<EOF
 # create-backend-index \
 #           --backend-name amIdentityStore \
 #           --set index-type:equality \
 #           --index-name fr-attr-i2
-# EOF
-
-
-# dsconfig --offline --no-prompt --batch <<EOF
 # create-backend-index \
 #         --backend-name amIdentityStore \
 #         --index-name fr-attr-date1 \

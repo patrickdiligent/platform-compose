@@ -1,5 +1,4 @@
-# Note: M5 integration with AM currently not working
-FROM gcr.io/forgerock-io/idm-cdk:7.2.0
+FROM gcr.io/forgerock-io/idm-cdk:7.4.0
 
 COPY debian-buster-sources.list /etc/apt/sources.list
 
@@ -12,4 +11,6 @@ RUN rm -f bundle/org.apache.felix.webconsole*.jar  && \
 # This sets the RAM based on cgroups to 65% of the container memory
 ENV JAVA_OPTS -XX:MaxRAMPercentage=65 -XX:InitialRAMPercentage=65 -XX:MaxTenuringThreshold=1 -Djava.security.egd=file:/dev/urandom -XshowSettings:vm  -XX:+PrintFlagsFinal
 
+COPY --chown=forgerock:root config/ /opt/openidm
+COPY --chown=forgerock:root bin/import-pem-certs.sh /opt/openidm/bin
 COPY --chown=forgerock:root . /opt/openidm

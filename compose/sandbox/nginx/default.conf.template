@@ -39,7 +39,7 @@ server {
 
     location ~ /(admin|openidm|api)/? {
         proxy_pass http://idm:8080;
-    }
+   }
 
     location /enduser/ {
         proxy_pass http://enduserUI:8080/;

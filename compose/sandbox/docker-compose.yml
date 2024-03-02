@@ -21,7 +21,7 @@ services:
     build: 
       context: $DOCKER/ds
       dockerfile: $DOCKER/ds/idrepo/Dockerfile
-    image: ${REGISTRY}/ds-idrepo:${VERSION}
+    image: ${REGISTRY}/ds-idrepo:${DS_VERSION}
     container_name: idrepo.local
     environment:
       - DS_SET_UID_ADMIN_AND_MONITOR_PASSWORDS=true
@@ -38,7 +38,7 @@ services:
     build: 
       context: $DOCKER/ds
       dockerfile: $DOCKER/ds/cts/Dockerfile
-    image: ${REGISTRY}/ds-cts:${VERSION}
+    image: ${REGISTRY}/ds-cts:${DS_VERSION}
     container_name: cts.local
     ports:
       - 1389:1389
@@ -62,7 +62,7 @@ services:
       - idrepo
     volumes:
       - ./security/am:/var/run/secrets
-      - ../../config/stage:/home/forgerock/shared
+      # - ../../config/stage:/home/forgerock/shared
     environment:
       - AM_STORES_USER_SERVERS=idrepo:1389
       - AM_STORES_USER_CONNECTION_MODE=ldap
@@ -70,7 +70,7 @@ services:
       - AM_STORES_SSL_ENABLED=false
       - AM_PASSWORDS_AMADMIN_CLEAR=password
       - FQDN=${FQDN}
-      - AM_SERVER_FQDN=${AM_FQDN}
+      - AM_SERVER_FQDN=${FQDN}
       - AM_ENCRYPTION_KEY=C00lbeans
       - PLATFORM_UI_IS_FRAAS=false
       - VERSION=${VERSION}
@@ -101,22 +101,23 @@ services:
       - OPENIDM_REPO_HOST=idrepo
       - OPENIDM_REPO_PORT=1389
       - OPENIDM_REPO_PASSWORD=password
-      - OPENIDM_SECONDARY_REPO_HOST=idrepo1
       - OPENIDM_KEYSTORE_LOCATION=/var/run/secrets/idm/keystore.jceks
       - OPENIDM_TRUSTSTORE_LOCATION=/var/run/secrets/idm/truststore
+    depends_on:
+      - idrepo
 
   adminUI:
-    image: gcr.io/forgerock-io/platform-admin-ui:7.2.0
+    image: gcr.io/forgerock-io/platform-admin-ui:7.4.0
     container_name: adminui.local
     environment: *platform-properties
   
   enduserUI:
-    image: gcr.io/forgerock-io/platform-enduser-ui:7.2.0
+    image: gcr.io/forgerock-io/platform-enduser-ui:7.4.0
     container_name: enduserui.local
     environment: *platform-properties
 
   loginUI:
-    image: gcr.io/forgerock-io/platform-login-ui:7.2.0
+    image: gcr.io/forgerock-io/platform-login-ui:7.4.0
     container_name: loginui.local
     environment: *platform-properties
 
@@ -126,7 +127,7 @@ services:
     ports:
       - 443:443
     depends_on:
-      - idm
+      # - idm
       - am
     volumes:
       - ./nginx/default.conf.template:/etc/nginx/conf.d/default.conf.template
