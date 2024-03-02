@@ -19,12 +19,11 @@ Note: make sure the docker image have enough resources (I boosted Docker Desktop
 	```yaml
 	nginx:
 		image: nginx
-		...
+
 		volumes:
 		- ./nginx/default.conf.template:/etc/nginx/conf.d/default.conf.template
 		- ./nginx/certs/platform.crt:/etc/nginx/ssl.crt
 		- ./nginx/certs/platform-key.pem:/etc/nginx/ssl-key.pem
-    ...
     ```
 	
 	To generate the certificates: 
