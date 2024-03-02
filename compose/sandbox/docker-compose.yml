@@ -52,7 +52,7 @@ services:
       - ./security/ds:/opt/opendj/secrets
   
   am:
-    build: $DOCKER/am/am
+    build: $DOCKER/am
     image: ${REGISTRY}/am:${VERSION}
     container_name: ${AM_CONTAINER}
     ports:

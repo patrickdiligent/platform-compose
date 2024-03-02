@@ -35,12 +35,6 @@ Note: make sure the docker image have enough resources (I boosted Docker Desktop
 	Common Name (eg, fully qualified host name) []:platform.example.com
 	Email Address []:
 	```
-1. Propagate the configuration to be baked into the Docker images:
-
-	```bash
-		$ cd platform-compose/compose/sandbox
-		$ bin/init-config.sh
-	```
 
 1. Build the Docker Images
 	```bash
@@ -65,6 +59,9 @@ Note: make sure the docker image have enough resources (I boosted Docker Desktop
 	1. Point the browser to `http://<FQDN>/platform` to access the platform admin UI
 	1. Point to `http://<FQDN>/enduser` for self-service,
 	1. Point to `http://<FQDN>/login` for the central login page.
+
+1. Customisation
+	Add configuration overrid in `docker/am/config` (keeping the structure `services/realm/root...` and `docker/idm/config` (e.g `conf/..`)
 
 #### NGINX Logging configuration
 
