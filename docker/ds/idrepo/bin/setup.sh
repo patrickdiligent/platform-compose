@@ -205,17 +205,21 @@ EOF
 
 # Example of creating additional indexes.
 # Uncomment these as per your needs:
-# dsconfig --offline --no-prompt --batch <<EOF
-# create-backend-index \
-#           --backend-name amIdentityStore \
-#           --set index-type:equality \
-#           --index-name fr-attr-i1
-# create-backend-index \
-#           --backend-name amIdentityStore \
-#           --set index-type:equality \
-#           --index-name fr-attr-i2
-# create-backend-index \
-#         --backend-name amIdentityStore \
-#         --index-name fr-attr-date1 \
-#         --set index-type:equality
-# EOF
+dsconfig --offline --no-prompt --batch <<EOF
+create-backend-index \
+          --backend-name amIdentityStore \
+          --set index-type:equality \
+          --index-name userroles
+create-backend-index \
+          --backend-name amIdentityStore \
+          --set index-type:equality \
+          --index-name fr-attr-i1
+create-backend-index \
+          --backend-name amIdentityStore \
+          --set index-type:equality \
+          --index-name fr-attr-i2
+create-backend-index \
+        --backend-name amIdentityStore \
+        --index-name fr-attr-date1 \
+        --set index-type:equality
+EOF

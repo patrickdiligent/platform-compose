@@ -9,6 +9,12 @@ objectClass: subschema
 cn: schema
 # Sample additional attributes
 # Indexed attributes have -i- in the name
+attributeTypes: (  userroles
+  NAME 'userroles'
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+  EQUALITY caseIgnoreMatch
+  ORDERING caseIgnoreOrderingMatch
+  X-STABILITY 'Internal' )
 attributeTypes: (  fr-attr-i1
   NAME 'fr-attr-i1'
   SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
@@ -55,5 +61,6 @@ objectClasses: (  fr-ext-attrs
         fr-attr-2 $
         fr-attr-i1 $
         fr-attr-i2 $
-        fr-attr-date1
+        fr-attr-date1 $
+        userroles
         )  )

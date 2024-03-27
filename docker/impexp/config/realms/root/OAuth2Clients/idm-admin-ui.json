@@ -73,7 +73,7 @@
     "coreOAuth2ClientConfig" : {
       "loopbackInterfaceRedirection" : false,
       "authorizationCodeLifetime" : 0,
-      "accessTokenLifetime" : 240,
+      "accessTokenLifetime" : 3600,
       "defaultScopes" : [ ],
       "clientName" : [ ],
       "clientType" : "Public",

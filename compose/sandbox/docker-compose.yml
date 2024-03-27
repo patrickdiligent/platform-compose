@@ -34,6 +34,16 @@ services:
       - ./security/ds:/opt/opendj/secrets
     command: start-ds
 
+  postgres:
+    build: $DOCKER/postgres
+    container_name: postgres.local
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=password
+
   cts:
     build: 
       context: $DOCKER/ds
@@ -95,11 +105,14 @@ services:
     container_name: ${IDM_CONTAINER}
     volumes:
       - ./security/idm:/var/run/secrets/idm
+      - ./csvfiles:/opt/openidm/csvfiles
     ports:
       - 8082:8080
     environment:
-      - OPENIDM_REPO_HOST=idrepo
-      - OPENIDM_REPO_PORT=1389
+      # - OPENIDM_REPO_HOST=idrepo
+      # - OPENIDM_REPO_PORT=1389
+      - OPENIDM_REPO_HOST=postgres
+      - OPENIDM_REPO_PORT=5432
       - OPENIDM_REPO_PASSWORD=password
       - OPENIDM_KEYSTORE_LOCATION=/var/run/secrets/idm/keystore.jceks
       - OPENIDM_TRUSTSTORE_LOCATION=/var/run/secrets/idm/truststore
@@ -141,3 +154,4 @@ volumes:
   shared:
   idrepodata:
   ctsdata:
+  pgdata:

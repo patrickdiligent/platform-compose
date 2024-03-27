@@ -5,7 +5,8 @@ COPY debian-buster-sources.list /etc/apt/sources.list
 # Harden IDM by removing the Felix OSGI Console. Unless you are a ForgeRock developer, the
 # console is rarely required. Your configuration should NOT include conf/felix.webconsole.json
 RUN rm -f bundle/org.apache.felix.webconsole*.jar  && \
-    rm -f bundle/openidm-felix-webconsole-*.jar
+    rm -f bundle/openidm-felix-webconsole-*.jar && \
+    rm -f conf/repo.ds.json
 
 # Remove this once https://bugster.forgerock.org/jira/browse/OPENIDM-16100 is integrated
 # This sets the RAM based on cgroups to 65% of the container memory
@@ -14,3 +15,5 @@ ENV JAVA_OPTS -XX:MaxRAMPercentage=65 -XX:InitialRAMPercentage=65 -XX:MaxTenurin
 COPY --chown=forgerock:root config/ /opt/openidm
 COPY --chown=forgerock:root bin/import-pem-certs.sh /opt/openidm/bin
 COPY --chown=forgerock:root . /opt/openidm
+
+RUN mkdir /opt/openidm/csvfiles
