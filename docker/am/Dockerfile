@@ -1,4 +1,4 @@
-FROM gcr.io/forgerock-io/am-cdk:7.4.0
+FROM gcr.io/forgerock-io/am-cdk:7.5.0
 
 ARG CONFIG_PROFILE=cdk
 COPY  --chown=forgerock:root config /home/forgerock/openam/

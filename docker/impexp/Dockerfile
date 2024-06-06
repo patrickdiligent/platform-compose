@@ -1,5 +1,5 @@
 
-FROM gcr.io/forgerock-io/amster:7.4.0
+FROM gcr.io/forgerock-io/amster:7.5.0
 
 USER forgerock
 
