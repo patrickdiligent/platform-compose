@@ -15,5 +15,3 @@ ENV JAVA_OPTS -XX:MaxRAMPercentage=65 -XX:InitialRAMPercentage=65 -XX:MaxTenurin
 COPY --chown=forgerock:root config/ /opt/openidm
 COPY --chown=forgerock:root bin/import-pem-certs.sh /opt/openidm/bin
 COPY --chown=forgerock:root . /opt/openidm
-
-RUN mkdir /opt/openidm/csvfiles

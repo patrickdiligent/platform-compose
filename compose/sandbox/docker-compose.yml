@@ -105,7 +105,6 @@ services:
     container_name: ${IDM_CONTAINER}
     volumes:
       - ./security/idm:/var/run/secrets/idm
-      - ./csvfiles:/opt/openidm/csvfiles
     ports:
       - 8082:8080
     environment:
