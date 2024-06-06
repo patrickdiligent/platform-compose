@@ -29,11 +29,16 @@ server {
 
     location /am/XUI/ {
         proxy_pass http://loginUI:8080/;
+        proxy_set_header X-Forwarded-Host ${SERVER_NAME};
+        proxy_set_header X-Forwarded-Port 443;
     }
 
     location /am/ {
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "Upgrade";
+        proxy_set_header Host ${SERVER_NAME};
+        proxy_set_header X-Forwarded-Host ${SERVER_NAME};
+        proxy_set_header X-Forwarded-Port 443;
         proxy_pass http://am:8080;
     }
 
